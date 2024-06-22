@@ -18,7 +18,7 @@ public class CdCommand implements Command {
         fileSystem.changeDirectory("/");
         return "moved to directory '" + fileSystem.getCurrentPath() + "'";
       }
-     fileSystem.changeDirectory(path);
+      fileSystem.changeDirectory(path);
       return "moved to directory '" + fileSystem.getCurrentDirectory().getName() + "'";
     } catch (IllegalArgumentException e) {
       return e.getMessage();

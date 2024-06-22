@@ -1,0 +1,75 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class CdCommand {
+  + CdCommand(FileSystem, String): 
+  - fileSystem: FileSystem
+  - path: String
+}
+interface Command << interface >>
+class Directory {
+  + Directory(String): 
+  - children: Map<String, FileSystemElement>
+}
+class File {
+  + File(String): 
+}
+class FileSystem {
+  + FileSystem(): 
+  - currentDirectory: Directory
+  - root: Directory
+}
+class FileSystemElement {
+  + FileSystemElement(String): 
+  # name: String
+  # parent: Directory
+}
+class LsCommand {
+  + LsCommand(FileSystem, String): 
+  - order: String
+  - fileSystem: FileSystem
+}
+class MkDirCommand {
+  + MkDirCommand(FileSystem, String): 
+  - filesystem: FileSystem
+  - dirname: String
+}
+class PwdCommand {
+  + PwdCommand(FileSystem): 
+  - fileSystem: FileSystem
+}
+class RmCommand {
+  + RmCommand(FileSystem, String, boolean): 
+  - name: String
+  - recursive: boolean
+  - fileSystem: FileSystem
+}
+class TouchCommand {
+  + TouchCommand(FileSystem, String): 
+  - filesystem: FileSystem
+  - filename: String
+}
+
+CdCommand          -[#008200,dashed]-^  Command           
+CdCommand         "1" *-[#595959,plain]-> "fileSystem\n1" FileSystem        
+Directory          -[#000082,plain]-^  FileSystemElement 
+Directory         "1" *-[#595959,plain]-> "children\n*" FileSystemElement 
+File               -[#000082,plain]-^  FileSystemElement 
+FileSystem         -[#595959,dashed]->  Directory         : "«create»"
+FileSystem        "1" *-[#595959,plain]-> "root\n1" Directory         
+FileSystem         -[#595959,dashed]->  File              : "«create»"
+FileSystemElement "1" *-[#595959,plain]-> "parent\n1" Directory         
+LsCommand          -[#008200,dashed]-^  Command           
+LsCommand         "1" *-[#595959,plain]-> "fileSystem\n1" FileSystem        
+MkDirCommand       -[#008200,dashed]-^  Command           
+MkDirCommand      "1" *-[#595959,plain]-> "filesystem\n1" FileSystem        
+PwdCommand         -[#008200,dashed]-^  Command           
+PwdCommand        "1" *-[#595959,plain]-> "fileSystem\n1" FileSystem        
+RmCommand          -[#008200,dashed]-^  Command           
+RmCommand         "1" *-[#595959,plain]-> "fileSystem\n1" FileSystem        
+TouchCommand       -[#008200,dashed]-^  Command           
+TouchCommand      "1" *-[#595959,plain]-> "filesystem\n1" FileSystem        
+@enduml

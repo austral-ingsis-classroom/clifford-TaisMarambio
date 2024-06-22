@@ -1,6 +1,6 @@
 package edu.austral.ingsis.clifford.system;
 
-public abstract class FileSystemElement {  //this class is used for the Directory and File classes
+public abstract class FileSystemElement { // this class is used for the Directory and File classes
   protected String name;
   protected Directory parent;
 

@@ -50,7 +50,8 @@ public class FileSystem {
     for (int i = parts[0].isEmpty() ? 1 : 0; i < parts.length; i++) {
       String part = parts[i];
       if (part.isEmpty()) continue;
-      FileSystemElement element = current.getChild(part); //here we want to get the child of the current directory
+      FileSystemElement element =
+          current.getChild(part); // here we want to get the child of the current directory
       if (element == null || !element.isDirectory()) {
         throw new IllegalArgumentException("'" + path + "' directory does not exist");
       }
@@ -99,6 +100,4 @@ public class FileSystem {
   public List<String> listCurrentDirectory() {
     return currentDirectory.listDirectory();
   }
-
-
 }
