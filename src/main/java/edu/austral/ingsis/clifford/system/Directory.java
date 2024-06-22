@@ -23,7 +23,11 @@ public class Directory extends FileSystemElement {
   }
 
   public FileSystemElement getChild(String name) {
-    return children.get(name);
+    return children.keySet().stream()
+        .filter(key -> key.equalsIgnoreCase(name))
+        .map(children::get)
+        .findFirst()
+        .orElse(null);
   }
 
   public void removeChild(String name) {

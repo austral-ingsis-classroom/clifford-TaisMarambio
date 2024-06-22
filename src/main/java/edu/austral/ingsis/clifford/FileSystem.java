@@ -3,7 +3,6 @@ package edu.austral.ingsis.clifford;
 import edu.austral.ingsis.clifford.system.Directory;
 import edu.austral.ingsis.clifford.system.File;
 import edu.austral.ingsis.clifford.system.FileSystemElement;
-
 import java.util.List;
 
 public class FileSystem {
@@ -23,30 +22,37 @@ public class FileSystem {
     } else if (path.equals(".")) {
       // Do nothing
     } else if (path.startsWith("/")) {
-      Directory newDir = navigateTo(root, path.substring(1));
-      if (newDir != null && newDir.isDirectory()) {
-        currentDirectory = newDir;
-      } else {
-        throw new IllegalArgumentException("'" + path + "' directory does not exist");
-      }
+      currentDirectory = navigateTo(root, path.substring(1));
+    } else if (path.startsWith("./")) {
+      currentDirectory = navigateTo(currentDirectory, path.substring(2));
+    } else if (path.startsWith("../")) {
+      currentDirectory = navigateTo(currentDirectory.getParent(), path.substring(3));
+    } else if (path.startsWith("~")) {
+      currentDirectory = navigateTo(root, path.substring(1));
     } else {
-      Directory newDir = navigateTo(currentDirectory, path);
-      if (newDir != null && newDir.isDirectory()) {
-        currentDirectory = newDir;
-      } else {
-        throw new IllegalArgumentException("'" + path + "' directory does not exist");
+      String[] parts = path.split("/");
+      Directory newCurrent = currentDirectory;
+      for (String part : parts) {
+        FileSystemElement newElement = newCurrent.getChild(part);
+        if (newElement instanceof Directory) {
+          newCurrent = (Directory) newElement;
+        } else {
+          throw new IllegalArgumentException("'" + path + "' directory does not exist");
+        }
       }
+      currentDirectory = newCurrent;
     }
   }
 
   private Directory navigateTo(Directory start, String path) {
     String[] parts = path.split("/");
-    Directory current = start;
-    for (String part : parts) {
+    Directory current = parts[0].isEmpty() ? root : start;
+    for (int i = parts[0].isEmpty() ? 1 : 0; i < parts.length; i++) {
+      String part = parts[i];
       if (part.isEmpty()) continue;
-      FileSystemElement element = current.getChild(part);
+      FileSystemElement element = current.getChild(part); //here we want to get the child of the current directory
       if (element == null || !element.isDirectory()) {
-        return null;
+        throw new IllegalArgumentException("'" + path + "' directory does not exist");
       }
       current = (Directory) element;
     }
@@ -54,7 +60,11 @@ public class FileSystem {
   }
 
   public String getCurrentPath() {
-    return currentDirectory == root ? "/" : currentDirectory.getPath();
+    if (currentDirectory == root) {
+      return "/";
+    } else {
+      return currentDirectory.getPath();
+    }
   }
 
   public void createFile(String filename) {
@@ -89,4 +99,6 @@ public class FileSystem {
   public List<String> listCurrentDirectory() {
     return currentDirectory.listDirectory();
   }
+
+
 }

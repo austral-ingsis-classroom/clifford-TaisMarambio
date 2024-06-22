@@ -3,9 +3,9 @@ package edu.austral.ingsis.clifford.commands;
 import edu.austral.ingsis.clifford.FileSystem;
 
 public class RmCommand implements Command {
-  private FileSystem fileSystem;
-  private String name;
-  private boolean recursive;
+  private final FileSystem fileSystem;
+  private final String name;
+  private final boolean recursive;
 
   public RmCommand(FileSystem fileSystem, String name, boolean recursive) {
     this.fileSystem = fileSystem;

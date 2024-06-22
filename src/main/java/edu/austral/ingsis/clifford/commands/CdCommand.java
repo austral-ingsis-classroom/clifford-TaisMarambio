@@ -14,8 +14,12 @@ public class CdCommand implements Command {
   @Override
   public String execute() {
     try {
-      fileSystem.changeDirectory(path);
-      return "moved to directory '" + fileSystem.getCurrentPath() + "'";
+      if (path.equals("..") || path.equals("/")) {
+        fileSystem.changeDirectory("/");
+        return "moved to directory '" + fileSystem.getCurrentPath() + "'";
+      }
+     fileSystem.changeDirectory(path);
+      return "moved to directory '" + fileSystem.getCurrentDirectory().getName() + "'";
     } catch (IllegalArgumentException e) {
       return e.getMessage();
     }
