@@ -54,7 +54,7 @@ public class FileSystem {
   }
 
   public String getCurrentPath() {
-    return currentDirectory.getPath();
+    return currentDirectory == root ? "/" : currentDirectory.getPath();
   }
 
   public void createFile(String filename) {

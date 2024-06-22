@@ -1,11 +1,12 @@
 package edu.austral.ingsis.clifford.system;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Directory extends FileSystemElement {
-  private final Map<String, FileSystemElement> children = new HashMap<>();
+  private final Map<String, FileSystemElement> children = new LinkedHashMap<>();
 
   public Directory(String name) {
     super(name);
@@ -16,20 +17,23 @@ public class Directory extends FileSystemElement {
     return true;
   }
 
-  public void addChild(FileSystemElement element) {
-    element.setParent(this);
-    children.put(element.getName(), element);
-  }
-
-  public void removeChild(String name) {
-    children.remove(name);
+  public void addChild(FileSystemElement child) {
+    children.put(child.getName(), child);
+    child.setParent(this);
   }
 
   public FileSystemElement getChild(String name) {
     return children.get(name);
   }
 
+  public void removeChild(String name) {
+    FileSystemElement child = children.remove(name);
+    if (child != null) {
+      child.setParent(null);
+    }
+  }
+
   public List<String> listDirectory() {
-    return children.keySet().stream().toList();
+    return new ArrayList<>(children.keySet());
   }
 }
