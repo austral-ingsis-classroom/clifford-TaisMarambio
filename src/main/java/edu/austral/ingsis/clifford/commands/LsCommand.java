@@ -28,7 +28,7 @@ public class LsCommand implements Command {
     if (elements.isEmpty()) {
       return "";
     } else {
-      return String.join(" ", elements.stream().toList());
+      return String.join(" ", elements);
     }
   }
 }
